@@ -39,4 +39,8 @@ describe("StringCalculatorTddKata", () => {
         let stringCalculator = new StringCalculator();
         expect(() => { stringCalculator.Add("//;\n1;2\n5;-4") }).toThrowError("negatives not allowed -4");
     });
+    it("Provided '//;\n1;2\n5;-4\n-10', should throw exception 'negatives not allowed -4, -10'", () => {
+        let stringCalculator = new StringCalculator();
+        expect(() => { stringCalculator.Add("//;\n1;2\n5;-4\n-10") }).toThrowError("negatives not allowed -4, -10");
+    });
 });
