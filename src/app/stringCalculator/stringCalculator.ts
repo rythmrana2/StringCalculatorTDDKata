@@ -1,5 +1,9 @@
 export class StringCalculator {
+    //to count the number of times Add function was invoked
+    static CountForAdd: number = 0;
+
     Add(numbers: string): number {
+        StringCalculator.CountForAdd++;
         let correctedInput = numbers;
         let answer: number = 0;
         if (correctedInput !== "") {
@@ -15,7 +19,7 @@ export class StringCalculator {
         return answer;
     }
 
-    //helper function has decreased main function size and separated logic that is not required to be shown in main function
+    //helper function has decreased main function size and separated logic that is not required to be shown in main function.
     getAnswerFromString(alteredNumbers: string): number {
         let toBeParsedNumbers: string[] = alteredNumbers.split(',');
         let negativeNumbers: number[] = [];
@@ -30,5 +34,9 @@ export class StringCalculator {
             throw new Error("negatives not allowed " + negativeNumbers.join(", "));
         }
         return solution;
+    }
+
+    GetCalledCount() {
+        return StringCalculator.CountForAdd;
     }
 }
