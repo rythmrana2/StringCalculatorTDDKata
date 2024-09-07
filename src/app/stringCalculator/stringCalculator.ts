@@ -1,3 +1,3 @@
-class StringCalculator {
+export class StringCalculator {
 
 }
