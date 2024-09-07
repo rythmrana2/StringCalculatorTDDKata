@@ -15,7 +15,7 @@ describe("StringCalculatorTddKata", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.Add("1")).toEqual(1);
     });
-    it("Provided 1,2; should return 3", () => {
+    it("Provided '1,2', should return 3", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.Add("1,2")).toEqual(3);
     });
