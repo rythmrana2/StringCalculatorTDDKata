@@ -8,7 +8,18 @@ export class StringCalculator {
         let answer: number = 0;
         if (correctedInput !== "") {
             let delimiter: string = '\n';
-            if (correctedInput.startsWith("//")) {
+            if (correctedInput.startsWith("//[")) {
+                delimiter = delimiter + '|' + (Array.from(correctedInput.substring(correctedInput.indexOf('[') + 1, correctedInput.indexOf(']'))).map(character => {
+                    //checking if any of the delimiter is a special character in regex and if it is then escaping it
+                    if (['.', '+', '*', '?', '^', '$', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(character)) {
+                        character = '\\' + character;
+                    }
+                    return character;
+                })).join('');
+                //slicing from after the first few characters as they are delimiter information
+                correctedInput = correctedInput.slice(correctedInput.indexOf(']') + 2);
+            }
+            else if (correctedInput.startsWith("//")) {
                 delimiter = '[' + delimiter + correctedInput[2] + ']';
                 //slicing as first 4 characters are delimiter information
                 correctedInput = correctedInput.slice(4);
