@@ -1,5 +1,6 @@
 export class StringCalculator {
     Add(numbers: string): number {
-        return 0;
+        let answer = parseInt(numbers);
+        return answer;
     }
 }
