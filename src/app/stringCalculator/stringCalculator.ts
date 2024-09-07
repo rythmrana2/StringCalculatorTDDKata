@@ -19,15 +19,19 @@ export class StringCalculator {
         let correctedInput = input.slice(0);
         let delimiter = delim.slice(0);
         if (correctedInput.startsWith("//[")) {
-            delimiter = delimiter + '|' + (Array.from(correctedInput.substring(correctedInput.indexOf('[') + 1, correctedInput.indexOf(']'))).map(character => {
-                //checking if any of the delimiter is a special character in regex and if any is then escaping it
-                if (['.', '+', '*', '?', '^', '$', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(character)) {
-                    character = '\\' + character;
-                }
-                return character;
-            })).join('');
-            //slicing from after the first few characters as they are delimiter information
-            correctedInput = correctedInput.slice(correctedInput.indexOf(']') + 2);
+            //slicing from after '//'
+            correctedInput = correctedInput.slice(2);
+            while (correctedInput[0] == '[') {
+                delimiter = delimiter + '|' + (Array.from(correctedInput.substring(correctedInput.indexOf('[') + 1, correctedInput.indexOf(']'))).map(character => {
+                    //checking if any of the delimiter is a special character in regex and if any is then escaping it
+                    if (['.', '+', '*', '?', '^', '$', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(character)) {
+                        character = '\\' + character;
+                    }
+                    return character;
+                })).join('');
+                correctedInput = correctedInput.slice(correctedInput.indexOf(']') + 1);
+            }
+            correctedInput = correctedInput.slice(1);
         }
         else if (correctedInput.startsWith("//")) {
             delimiter = delimiter + '|' + (Array.from(correctedInput.substring(correctedInput.indexOf('/') + 2, correctedInput.indexOf('\n'))).map(character => {
