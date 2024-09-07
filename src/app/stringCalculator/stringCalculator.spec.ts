@@ -66,4 +66,9 @@ describe("StringCalculatorTddKata", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.Add("//[;;;]\n1;;;2;;;5;;;10011")).toEqual(8);
     });
+
+    it("Provided '//[;][%]\n1;2%5;100', should return 108", () => {
+        let stringCalculator = new StringCalculator();
+        expect(stringCalculator.Add("//[;][%]\n1;2%5;100")).toEqual(108);
+    });
 });
