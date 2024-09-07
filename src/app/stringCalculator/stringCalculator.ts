@@ -1,9 +1,9 @@
 export class StringCalculator {
     Add(numbers: string): number {
         let correctedInput = numbers;
-        let answer = 0;
+        let answer: number = 0;
         if (correctedInput !== "") {
-            let delimiter = '\n';
+            let delimiter: string = '\n';
             if (correctedInput.startsWith("//")) {
                 delimiter = '[' + delimiter + correctedInput[2] + ']';
                 //slicing as first 4 characters are delimiter information
@@ -16,10 +16,10 @@ export class StringCalculator {
     }
 
     //helper function has decreased main function size and separated logic that is not required to be shown in main function
-    getAnswerFromString(alteredNumbers) {
-        let toBeParsedNumbers = alteredNumbers.split(',');
-        let negativeNumbers = [];
-        let solution = toBeParsedNumbers.reduce((accumulator, currentValue) => {
+    getAnswerFromString(alteredNumbers: string): number {
+        let toBeParsedNumbers: string[] = alteredNumbers.split(',');
+        let negativeNumbers: number[] = [];
+        let solution: number = toBeParsedNumbers.reduce((accumulator, currentValue) => {
             let parsedNumber = parseInt(currentValue);
             if (parsedNumber < 0) {
                 negativeNumbers.push(parsedNumber);
