@@ -18,13 +18,17 @@ export class StringCalculator {
     //helper function has decreased main function size and separated logic that is not required to be shown in main function
     getAnswerFromString(alteredNumbers) {
         let toBeParsedNumbers = alteredNumbers.split(',');
+        let negativeNumbers = [];
         let solution = toBeParsedNumbers.reduce((accumulator, currentValue) => {
             let parsedNumber = parseInt(currentValue);
             if (parsedNumber < 0) {
-                throw new Error("negatives not allowed " + parsedNumber);
+                negativeNumbers.push(parsedNumber);
             }
             return accumulator += parsedNumber;
         }, 0);
+        if (negativeNumbers.length > 0) {
+            throw new Error("negatives not allowed " + negativeNumbers.join(", "));
+        }
         return solution;
     }
 }
