@@ -43,4 +43,9 @@ describe("StringCalculatorTddKata", () => {
         let stringCalculator = new StringCalculator();
         expect(() => { stringCalculator.Add("//;\n1;2\n5;-4\n-10") }).toThrowError("negatives not allowed -4, -10");
     });
+    //had to set random:false in karma.conf so that test run in order for this test
+    it("Invoked GetCalledCount function, should return 9 ", () => {
+        let stringCalculator = new StringCalculator();
+        expect(stringCalculator.GetCalledCount()).toEqual(9);
+    });
 });
