@@ -27,6 +27,8 @@ export class StringCalculator {
             let parsedNumber = parseInt(currentValue);
             if (parsedNumber < 0) {
                 negativeNumbers.push(parsedNumber);
+            } else if (parsedNumber > 1000) {
+                parsedNumber = 0;
             }
             return accumulator += parsedNumber;
         }, 0);
