@@ -15,37 +15,50 @@ describe("StringCalculatorTddKata", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.Add("1")).toEqual(1);
     });
+
     it("Provided '1,2', should return 3", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.Add("1,2")).toEqual(3);
     });
+
     it("Provided '1,2,5,10', should return 18", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.Add("1,2,5,10")).toEqual(18);
     });
+
     it("Provided '1,2\n5,10', should return 18", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.Add("1,2\n5,10")).toEqual(18);
     });
+
     it("Provided '1,2\n5\n100', should return 108", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.Add("1,2\n5\n100")).toEqual(108);
     });
+
     it("Provided '//;\n1;2;5;100', should return 108", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.Add("//;\n1;2;5;100")).toEqual(108);
     });
+
     it("Provided '//;\n1;2\n5;-4', should throw exception 'negatives not allowed -4'", () => {
         let stringCalculator = new StringCalculator();
         expect(() => { stringCalculator.Add("//;\n1;2\n5;-4") }).toThrowError("negatives not allowed -4");
     });
+
     it("Provided '//;\n1;2\n5;-4\n-10', should throw exception 'negatives not allowed -4, -10'", () => {
         let stringCalculator = new StringCalculator();
         expect(() => { stringCalculator.Add("//;\n1;2\n5;-4\n-10") }).toThrowError("negatives not allowed -4, -10");
     });
+
     //had to set random:false in karma.conf so that test run in order for this test
     it("Invoked GetCalledCount function, should return 9 ", () => {
         let stringCalculator = new StringCalculator();
         expect(stringCalculator.GetCalledCount()).toEqual(9);
+    });
+
+    it("Provided '//;\n1;2;5;10011', should return 8", () => {
+        let stringCalculator = new StringCalculator();
+        expect(stringCalculator.Add("//;\n1;2;5;10011")).toEqual(8);
     });
 });
