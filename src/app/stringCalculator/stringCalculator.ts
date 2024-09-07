@@ -11,7 +11,11 @@ export class StringCalculator {
             let alteredNumbers = correctedInput.replace(new RegExp(delimiter, 'g'), ',');
             let toBeParsedNumbers = alteredNumbers.split(',');
             answer = toBeParsedNumbers.reduce((accumulator, currentValue) => {
-                return accumulator += parseInt(currentValue);
+                let parsedNumber = parseInt(currentValue);
+                if (parsedNumber < 0) {
+                    throw new Error("negatives not allowed " + parsedNumber);
+                }
+                return accumulator += parsedNumber;
             }, 0);
         }
         return answer;
