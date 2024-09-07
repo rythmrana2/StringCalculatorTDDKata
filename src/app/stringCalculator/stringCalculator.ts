@@ -4,30 +4,43 @@ export class StringCalculator {
 
     Add(numbers: string): number {
         StringCalculator.CountForAdd++;
-        let correctedInput = numbers;
+        let correctedInput = numbers.slice(0);
         let answer: number = 0;
         if (correctedInput !== "") {
             let delimiter: string = '\n';
-            if (correctedInput.startsWith("//[")) {
-                delimiter = delimiter + '|' + (Array.from(correctedInput.substring(correctedInput.indexOf('[') + 1, correctedInput.indexOf(']'))).map(character => {
-                    //checking if any of the delimiter is a special character in regex and if it is then escaping it
-                    if (['.', '+', '*', '?', '^', '$', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(character)) {
-                        character = '\\' + character;
-                    }
-                    return character;
-                })).join('');
-                //slicing from after the first few characters as they are delimiter information
-                correctedInput = correctedInput.slice(correctedInput.indexOf(']') + 2);
-            }
-            else if (correctedInput.startsWith("//")) {
-                delimiter = '[' + delimiter + correctedInput[2] + ']';
-                //slicing as first 4 characters are delimiter information
-                correctedInput = correctedInput.slice(4);
-            }
+            [correctedInput, delimiter] = this.getDelimiterAndChangeString(correctedInput, delimiter);
             let alteredNumbers = correctedInput.replace(new RegExp(delimiter, 'g'), ',');
             answer = this.getAnswerFromString(alteredNumbers);
         }
         return answer;
+    }
+
+    getDelimiterAndChangeString(input: string, delim: string): [string, string] {
+        let correctedInput = input.slice(0);
+        let delimiter = delim.slice(0);
+        if (correctedInput.startsWith("//[")) {
+            delimiter = delimiter + '|' + (Array.from(correctedInput.substring(correctedInput.indexOf('[') + 1, correctedInput.indexOf(']'))).map(character => {
+                //checking if any of the delimiter is a special character in regex and if any is then escaping it
+                if (['.', '+', '*', '?', '^', '$', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(character)) {
+                    character = '\\' + character;
+                }
+                return character;
+            })).join('');
+            //slicing from after the first few characters as they are delimiter information
+            correctedInput = correctedInput.slice(correctedInput.indexOf(']') + 2);
+        }
+        else if (correctedInput.startsWith("//")) {
+            delimiter = delimiter + '|' + (Array.from(correctedInput.substring(correctedInput.indexOf('/') + 2, correctedInput.indexOf('\n'))).map(character => {
+                //checking if the delimiter is a special character in regex and if it is then escaping it
+                if (['.', '+', '*', '?', '^', '$', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(character)) {
+                    character = '\\' + character;
+                }
+                return character;
+            })).join('');
+            //slicing as first 4 characters are delimiter information
+            correctedInput = correctedInput.slice(4);
+        }
+        return [correctedInput, delimiter];
     }
 
     //helper function has decreased main function size and separated logic that is not required to be shown in main function.
