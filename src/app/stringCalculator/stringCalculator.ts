@@ -41,10 +41,14 @@ export class StringCalculator {
                 }
                 return character;
             })).join('');
-            //slicing as first 4 characters are delimiter information
-            correctedInput = correctedInput.slice(4);
+
+            correctedInput = this.removeDelimiterInformation(correctedInput);
         }
         return [correctedInput, delimiter];
+    }
+
+    removeDelimiterInformation(input: string) {
+        return input.slice(4);
     }
 
     //helper function has decreased main function size and separated logic that is not required to be shown in main function.
