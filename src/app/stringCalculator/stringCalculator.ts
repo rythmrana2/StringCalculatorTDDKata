@@ -4,7 +4,7 @@ export class StringCalculator {
 
     Add(numbers: string): number {
         StringCalculator.CountForAdd++;
-        let correctedInput = numbers.slice(0);
+        let correctedInput = this.getArrayCopy(numbers, 0);
         let answer: number = 0;
         if (correctedInput !== "") {
             let delimiter: string = '\n';
@@ -16,46 +16,52 @@ export class StringCalculator {
     }
 
     getDelimiterAndChangeString(input: string, delim: string): [string, string] {
-        let correctedInput = input.slice(0);
-        let delimiter = delim.slice(0);
+        let correctedInput = this.getArrayCopy(input, 0);
+        let delimiter = this.getArrayCopy(delim, 0);
         if (correctedInput.startsWith("//[")) {
             //slicing from after '//'
-            correctedInput = correctedInput.slice(2);
+            correctedInput = this.removeDelimiterInformation(correctedInput, 2);
             while (correctedInput[0] == '[') {
-                delimiter = delimiter + '|' + (Array.from(correctedInput.substring(correctedInput.indexOf('[') + 1, correctedInput.indexOf(']'))).map(character => {
-                    //checking if any of the delimiter is a special character in regex and if any is then escaping it
-                    if (['.', '+', '*', '?', '^', '$', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(character)) {
-                        character = '\\' + character;
-                    }
-                    return character;
-                })).join('');
-                correctedInput = correctedInput.slice(correctedInput.indexOf(']') + 1);
+                delimiter = this.buildDelimiter(delimiter, correctedInput, correctedInput.indexOf('[') + 1, correctedInput.indexOf(']'));
+                correctedInput = this.removeDelimiterInformation(correctedInput, correctedInput.indexOf(']') + 1);
             }
-            correctedInput = correctedInput.slice(1);
+            correctedInput = this.removeDelimiterInformation(correctedInput, 1);
         }
         else if (correctedInput.startsWith("//")) {
-            delimiter = delimiter + '|' + (Array.from(correctedInput.substring(correctedInput.indexOf('/') + 2, correctedInput.indexOf('\n'))).map(character => {
-                //checking if the delimiter is a special character in regex and if it is then escaping it
-                if (['.', '+', '*', '?', '^', '$', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(character)) {
-                    character = '\\' + character;
-                }
-                return character;
-            })).join('');
-
-            correctedInput = this.removeDelimiterInformation(correctedInput);
+            delimiter = this.buildDelimiter(delimiter, correctedInput, correctedInput.indexOf('/') + 2, correctedInput.indexOf('\n'));
+            correctedInput = this.removeDelimiterInformation(correctedInput, 4);
         }
         return [correctedInput, delimiter];
     }
 
-    removeDelimiterInformation(input: string) {
-        return input.slice(4);
+    buildDelimiter(delimiter: string, input: string, substringStartingPosition, substringEndingPosition) {
+        return (delimiter + '|' + (Array.from(input.substring(substringStartingPosition, substringEndingPosition)).map((character: string) => {
+            //checking if the delimiter is a special character in regex and if it is then escaping it
+            if (['.', '+', '*', '?', '^', '$', '(', ')', '[', ']', '{', '}', '|', '\\'].includes(character)) {
+                character = '\\' + character;
+            }
+            return character;
+        })).join(''));
+    }
+
+    removeDelimiterInformation(input: string, position: number) {
+        return this.getArrayCopy(input, position);
     }
 
     //helper function has decreased main function size and separated logic that is not required to be shown in main function.
     getAnswerFromString(alteredNumbers: string): number {
-        let toBeParsedNumbers: string[] = alteredNumbers.split(',');
+        let toBeParsedNumbers: string[] = this.getNumbersFromString(alteredNumbers, ',');
         let negativeNumbers: number[] = [];
-        let solution: number = toBeParsedNumbers.reduce((accumulator, currentValue) => {
+        let solution: number;
+        [solution, negativeNumbers] = this.getSolutionFromNumbers(toBeParsedNumbers, negativeNumbers);
+        if (negativeNumbers.length > 0) {
+            throw new Error("negatives not allowed " + negativeNumbers.join(", "));
+        }
+        return solution;
+    }
+
+    getSolutionFromNumbers(numbers: string[], negativeNumbers: number[]): [number, number[]] {
+        const solution: number = numbers.reduce((accumulator, currentValue) => {
             let parsedNumber = parseInt(currentValue);
             if (parsedNumber < 0) {
                 negativeNumbers.push(parsedNumber);
@@ -64,10 +70,15 @@ export class StringCalculator {
             }
             return accumulator += parsedNumber;
         }, 0);
-        if (negativeNumbers.length > 0) {
-            throw new Error("negatives not allowed " + negativeNumbers.join(", "));
-        }
-        return solution;
+        return [solution, negativeNumbers];
+    }
+
+    getNumbersFromString(arrayName, delimiter) {
+        return arrayName.split(delimiter)
+    }
+
+    getArrayCopy(arrayName, position = 0) {
+        return arrayName.slice(position);
     }
 
     GetCalledCount() {
